@@ -1,5 +1,4 @@
 import React from 'react'
-import { Header } from 'react-native/Libraries/NewAppScreen'
 import {
   SafeAreaView,
   ScrollView,
@@ -8,6 +7,7 @@ import {
   Text,
   View,
 } from 'react-native'
+import { API_URL } from '@env'
 
 // import type {PropsWithChildren} from 'react'
 // type SectionProps = PropsWithChildren<{
@@ -19,9 +19,8 @@ function App(): React.JSX.Element {
     <SafeAreaView>
       <StatusBar barStyle={'light-content'} />
       <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <Header />
         <View>
-          <Text style={styles.highlight}>App.tsx</Text>
+          <Text style={styles.highlight}>App.tsx {API_URL}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
