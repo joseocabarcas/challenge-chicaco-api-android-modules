@@ -1,5 +1,7 @@
 import IconBack from '@app/assets/icons/icon_back.svg'
 import IconSave from '@app/assets/icons/icon_save.svg'
+import IconCalendar from '@app/assets/icons/icon_calendar.svg'
+import IconMapLocation from '@app/assets/icons/icon_map_location.svg'
 import { EventProps } from '@app/navigation/types'
 import { removeHtml } from '@app/utils/removeHtml'
 import * as React from 'react'
@@ -74,10 +76,40 @@ function EventScreen({ route, navigation }: EventProps) {
               <Text style={styles.textTitle}>
                 {removeHtml(event?.title || '')}
               </Text>
+              {/* Hero caption */}
+              {event?.hero_caption && (
+                <View style={styles.containerHero}>
+                  <Text style={styles.textHero}>
+                    {removeHtml(event.hero_caption)}
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
           {event && (
             <View style={styles.containerSection}>
+              <View style={styles.containerItems}>
+                <View style={styles.containerItemIcon}>
+                  <IconCalendar
+                    height={14}
+                    width={14}
+                    color={'#005477'}
+                    style={styles.icon}
+                  />
+                  <Text style={styles.textIcon}>
+                    {event?.date_display || ''}
+                  </Text>
+                </View>
+                <View style={styles.containerItemIcon}>
+                  <IconMapLocation
+                    height={14}
+                    width={14}
+                    color={'#005477'}
+                    style={styles.icon}
+                  />
+                  <Text style={styles.textIcon}>{event?.location || ''}</Text>
+                </View>
+              </View>
               <View style={styles.containerDesciption}>
                 <Text style={styles.labelDesciption}>Description</Text>
                 <MoreTruncatedText
@@ -85,6 +117,19 @@ function EventScreen({ route, navigation }: EventProps) {
                   linesToTruncate={4}
                   text={removeHtml(event.description)}
                 />
+              </View>
+              {/* Tags */}
+              <View style={styles.containerTags}>
+                {event.is_free && (
+                  <View style={[styles.tag, styles.tagPrimary]}>
+                    <Text style={styles.textTag}>Free</Text>
+                  </View>
+                )}
+                {event.is_sold_out && (
+                  <View style={[styles.tag, styles.tagDanger]}>
+                    <Text style={styles.textTag}>Sold Out</Text>
+                  </View>
+                )}
               </View>
             </View>
           )}
