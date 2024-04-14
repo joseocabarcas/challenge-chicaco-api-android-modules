@@ -29,13 +29,14 @@ export const useEventsStore = create<EventsState>()(
     {
       name: 'bear-storage',
       storage: createJSONStorage(() => zustandStorage),
+      partialize: state => ({ favorites: state.favorites }),
     },
   ),
 )
 
-export const useFavorites = () => useEventsStore(state => state.favorites)
+export const useFavoritesEvents = () => useEventsStore(state => state.favorites)
 
-export const useActions = () => useEventsStore(state => state.actions)
+export const useActionsEvents = () => useEventsStore(state => state.actions)
 
 export const useIsFavorite = (eventId: number) =>
   useEventsStore(state => state.favorites.find(item => item.id === eventId))

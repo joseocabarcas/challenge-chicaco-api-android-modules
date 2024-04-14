@@ -7,3 +7,8 @@ export type RootStackParamList = {
 }
 
 export type EventProps = NativeStackScreenProps<RootStackParamList, 'Event'>
+
+export type FavoritesProps = NativeStackScreenProps<
+  RootStackParamList,
+  'Favorites'
+>
