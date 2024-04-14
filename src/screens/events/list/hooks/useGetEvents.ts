@@ -3,16 +3,45 @@ import { RootEvents } from '@app/types/pagination'
 import { useEffect, useState } from 'react'
 
 export function useGetEvents() {
+  const [loading, setLoading] = useState(false)
   const [data, setData] = useState<RootEvents | null>(null)
 
   useEffect(() => {
     async function getAllEvents() {
-      const data = await getEvents()
-      setData(data.data)
-      console.log('data')
+      setLoading(true)
+      const resp = await getEvents()
+      console.log('resp.data', resp.data?.pagination)
+      setData(resp.data)
+      setLoading(false)
     }
 
     void getAllEvents()
   }, [])
-  return { data }
+
+  // fetch next page
+  const viewMore = async () => {
+    if (!data) return
+    if (data.pagination.current_page >= data.pagination.total_pages) {
+      console.warn('limit page')
+      return
+    }
+
+    setLoading(true)
+    const resp = await getEvents(
+      data.pagination.current_page * data.pagination.limit,
+    )
+
+    if (resp.data) {
+      setData(val => {
+        if (val) {
+          const dataVal = resp.data.data || []
+          return { ...resp.data, data: [...val.data, ...dataVal] }
+        }
+        return val
+      })
+    }
+    setLoading(false)
+  }
+
+  return { data, viewMore, loading }
 }

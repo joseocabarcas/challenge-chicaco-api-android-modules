@@ -13,8 +13,6 @@ interface EventProps {
 
 function Event({ event }: EventProps): React.JSX.Element {
   const navigation: NavigationProp<RootStackParamList> = useNavigation()
-  const title = removeHtml(event.title)
-  const shortDescription = removeHtml(event.short_description)
 
   const onPress = () => {
     navigation.navigate('Event', {
@@ -49,12 +47,14 @@ function Event({ event }: EventProps): React.JSX.Element {
           />
         </View>
         <View style={styles.containerText}>
-          <Text style={[styles.text, styles.textTitle]}>{title}</Text>
+          <Text style={[styles.text, styles.textTitle]}>
+            {removeHtml(event.title)}
+          </Text>
           <Text
             style={[styles.text, styles.textSecondary]}
             numberOfLines={3}
             ellipsizeMode="tail">
-            {shortDescription}
+            {removeHtml(event.short_description)}
           </Text>
           {event.date_display && (
             <Text style={[styles.text, styles.textSecondary]}>
