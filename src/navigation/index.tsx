@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import * as React from 'react'
 import EventScreen from '@app/screens/events/detail'
+import FavoritesScreen from '@app/screens/events/favorites/screen'
 
 import { RootStackParamList } from './types'
 
@@ -21,6 +22,11 @@ function Navigation() {
           name="Event"
           component={EventScreen}
           options={{ headerShown: false, animation: 'slide_from_right' }}
+        />
+        <RootStack.Screen
+          name="Favorites"
+          component={FavoritesScreen}
+          options={{ headerShown: false, animation: 'fade_from_bottom' }}
         />
       </RootStack.Navigator>
     </NavigationContainer>

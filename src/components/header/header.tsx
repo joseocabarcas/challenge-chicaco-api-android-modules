@@ -1,15 +1,23 @@
 import * as React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import IconSave from '@app/assets/icons/icon_save.svg'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import IconStar from '@app/assets/icons/icon_star_regular.svg'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { RootStackParamList } from '@app/navigation/types'
 
 function Header(): React.JSX.Element {
+  const navigation: NavigationProp<RootStackParamList> = useNavigation()
+
+  const onPress = () => {
+    navigation.navigate('Favorites')
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.textTitle}>Events</Text>
-      <View>
+      <TouchableOpacity onPress={onPress}>
         {/* Icons */}
-        <IconSave height={22} width={16} color={'#000000'} />
-      </View>
+        <IconStar height={22} width={16} color={'#000000'} />
+      </TouchableOpacity>
     </View>
   )
 }

@@ -1,5 +1,6 @@
 import IconBack from '@app/assets/icons/icon_back.svg'
-import IconSave from '@app/assets/icons/icon_save.svg'
+import IconStar from '@app/assets/icons/icon_star_regular.svg'
+import IconStarFull from '@app/assets/icons/icon_star_solid.svg'
 import IconCalendar from '@app/assets/icons/icon_calendar.svg'
 import IconMapLocation from '@app/assets/icons/icon_map_location.svg'
 import { EventProps } from '@app/navigation/types'
@@ -22,10 +23,13 @@ import { MoreTruncatedText } from '@app/components/more-truncated-text/more-trun
 
 import { useGetEvent } from './hooks/useGetEvent'
 import { styles } from './styles'
+import { useFavorites } from './hooks/useFavorites'
 
 function EventScreen({ route, navigation }: EventProps) {
   const { eventId, uriImage } = route.params
   const { data } = useGetEvent(eventId)
+  const { isFavorite, addToFavorite, removeFromFavorite } =
+    useFavorites(eventId)
   const event = data?.data
 
   // It's optional styling for animated
@@ -43,6 +47,11 @@ function EventScreen({ route, navigation }: EventProps) {
 
   const onBack = () => {
     navigation.goBack()
+  }
+
+  const onHandleFavoriteAction = () => {
+    if (!event) return
+    isFavorite ? removeFromFavorite(eventId) : addToFavorite(event)
   }
 
   return (
@@ -67,10 +76,13 @@ function EventScreen({ route, navigation }: EventProps) {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={onHandleFavoriteAction}
               style={[styles.circleButton, styles.circleBookmark]}>
-              <View>
-                <IconSave height={18} width={14} color={'#FFFFFF'} />
-              </View>
+              {isFavorite ? (
+                <IconStarFull height={18} width={14} color={'#FFFFFF'} />
+              ) : (
+                <IconStar height={18} width={14} color={'#FFFFFF'} />
+              )}
             </TouchableOpacity>
             <View style={styles.shadow}>
               <Text style={styles.textTitle}>
