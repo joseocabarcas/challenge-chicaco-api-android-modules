@@ -9,7 +9,6 @@ export function useGetEvent(eventId: number) {
     async function getDetailEvent() {
       const data = await getEvent(eventId)
       setData(data.data)
-      console.log('data')
     }
 
     void getDetailEvent()

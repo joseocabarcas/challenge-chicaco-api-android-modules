@@ -22,6 +22,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { MoreTruncatedText } from '@app/components/more-truncated-text/more-truncated-text'
 import RTNCalendar from 'rtn-calendar/js/NativeCalendar'
+import { requestCalendarPermission } from '@app/utils/requestPermissionCalendar'
 
 import { useGetEvent } from './hooks/useGetEvent'
 import { styles } from './styles'
@@ -58,14 +59,33 @@ function EventScreen({ route, navigation }: EventProps) {
 
   const onHandleAddToCalendar = async () => {
     if (!event) return
-    console.log('=========>', RTNCalendar)
+
     const val = await RTNCalendar?.addEvent(
       event?.title,
       event.short_description,
       event.start_date,
       event.end_date,
+      event.start_time,
+      event.end_time,
+      event.location,
     )
-    console.log('val =========>', val)
+  }
+
+  const onHandleAddToCalendarAutomatic = async () => {
+    if (!event) return
+    const resPermission = await requestCalendarPermission()
+
+    if (!resPermission) return
+
+    const val = await RTNCalendar?.addEventAutomatic(
+      event?.title,
+      event.short_description,
+      event.start_date,
+      event.end_date,
+      event.start_time,
+      event.end_time,
+      event.location,
+    )
   }
 
   return (
@@ -90,6 +110,12 @@ function EventScreen({ route, navigation }: EventProps) {
               </View>
             </TouchableOpacity>
             <View style={styles.circleActions}>
+              {/* Add to calendar automatic */}
+              <TouchableOpacity
+                onPress={() => void onHandleAddToCalendarAutomatic()}
+                style={[styles.circleButton]}>
+                <IconCalendarPlus height={18} width={14} color={'#FFFFFF'} />
+              </TouchableOpacity>
               {/* Add to calendar */}
               <TouchableOpacity
                 onPress={() => void onHandleAddToCalendar()}

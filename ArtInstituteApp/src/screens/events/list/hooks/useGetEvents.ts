@@ -10,7 +10,6 @@ export function useGetEvents() {
     async function getAllEvents() {
       setLoading(true)
       const resp = await getEvents()
-      console.log('resp.data', resp.data?.pagination)
       setData(resp.data)
       setLoading(false)
     }
