@@ -4,7 +4,7 @@
 
 RCT_EXPORT_MODULE()
 
-- (void)addEvent:(char)a resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
+- (void)addEvent:(char)a b:(char)b c:(char)c d:(char)d e:(char)e f:(char)f g:(char)g resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject {
     bool *result = [[bool alloc] initWithBool:TRUE];
     resolve(result);
 }

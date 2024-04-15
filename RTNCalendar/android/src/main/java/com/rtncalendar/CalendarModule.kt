@@ -41,7 +41,6 @@ class CalendarModule(val reactContext: ReactApplicationContext) : NativeCalendar
         .putExtra(CalendarContract.Events.DESCRIPTION, description)
         .putExtra(CalendarContract.Events.EVENT_LOCATION, location)
         .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
-      // reactContext.startActivity(intent)
       reactContext.startActivityForResult(intent, 11, Bundle.EMPTY)
       promise.resolve(true)
     } catch (e: Exception) {
@@ -73,17 +72,15 @@ class CalendarModule(val reactContext: ReactApplicationContext) : NativeCalendar
           // TODO:
           Log.d("CalendarModule", "shouldShowRequestPermissionRationale")
         } else {
-          Log.d("CalendarModule", "requestPermissions")
           ActivityCompat.requestPermissions(reactContext.currentActivity!!, arrayOf(Manifest.permission.WRITE_CALENDAR), 20)
           // TODO: handle cycle
+          Log.d("CalendarModule", "requestPermissions")
         }
       } else{
         val uri: Uri? = reactContext.contentResolver.insert(CalendarContract.Events.CONTENT_URI, values)
-        Log.d("CalendarModule", "contentResolver")
 
         if (uri != null) {
           val eventID: Long = uri.lastPathSegment!!.toLong()
-          Log.d("CalendarModule", "contentResolver" + uri.lastPathSegment)
           promise.resolve(true)
           return
         }
@@ -100,10 +97,8 @@ class CalendarModule(val reactContext: ReactApplicationContext) : NativeCalendar
   fun parseToMillis(date: String, time: String): Long {
     // tricky
     val dateTime = date.replace("T00:00:00", "T${time}:00")
-    Log.d("CalendarModule", "parse date $dateTime")
     val datetimeFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
     datetimeFormatter.timeZone = TimeZone.getTimeZone("UTC")
-    Log.d("CalendarModule", "date time" + datetimeFormatter.parse(dateTime)!!.time)
     return datetimeFormatter.parse(dateTime)!!.time
   }
 
