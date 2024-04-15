@@ -2,6 +2,7 @@ import IconBack from '@app/assets/icons/icon_back.svg'
 import IconStar from '@app/assets/icons/icon_star_regular.svg'
 import IconStarFull from '@app/assets/icons/icon_star_solid.svg'
 import IconCalendar from '@app/assets/icons/icon_calendar.svg'
+import IconCalendarPlus from '@app/assets/icons/icon_calendar_plus.svg'
 import IconMapLocation from '@app/assets/icons/icon_map_location.svg'
 import { EventProps } from '@app/navigation/types'
 import { removeHtml } from '@app/utils/removeHtml'
@@ -20,6 +21,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated'
 import { MoreTruncatedText } from '@app/components/more-truncated-text/more-truncated-text'
+import RTNCalendar from 'rtn-calendar/js/NativeCalendar'
 
 import { useGetEvent } from './hooks/useGetEvent'
 import { styles } from './styles'
@@ -54,6 +56,18 @@ function EventScreen({ route, navigation }: EventProps) {
     isFavorite ? removeFromFavorite(eventId) : addToFavorite(event)
   }
 
+  const onHandleAddToCalendar = async () => {
+    if (!event) return
+    console.log('=========>', RTNCalendar)
+    const val = await RTNCalendar?.addEvent(
+      event?.title,
+      event.short_description,
+      event.start_date,
+      event.end_date,
+    )
+    console.log('val =========>', val)
+  }
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <StatusBar barStyle={'light-content'} />
@@ -75,15 +89,24 @@ function EventScreen({ route, navigation }: EventProps) {
                 <IconBack height={18} width={14} color={'#FFFFFF'} />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={onHandleFavoriteAction}
-              style={[styles.circleButton, styles.circleBookmark]}>
-              {isFavorite ? (
-                <IconStarFull height={18} width={14} color={'#FFFFFF'} />
-              ) : (
-                <IconStar height={18} width={14} color={'#FFFFFF'} />
-              )}
-            </TouchableOpacity>
+            <View style={styles.circleActions}>
+              {/* Add to calendar */}
+              <TouchableOpacity
+                onPress={() => void onHandleAddToCalendar()}
+                style={[styles.circleButton]}>
+                <IconCalendarPlus height={18} width={14} color={'#FFFFFF'} />
+              </TouchableOpacity>
+              {/* Add or remove from favorites */}
+              <TouchableOpacity
+                onPress={onHandleFavoriteAction}
+                style={[styles.circleButton]}>
+                {isFavorite ? (
+                  <IconStarFull height={18} width={14} color={'#FFFFFF'} />
+                ) : (
+                  <IconStar height={18} width={14} color={'#FFFFFF'} />
+                )}
+              </TouchableOpacity>
+            </View>
             <View style={styles.shadow}>
               <Text style={styles.textTitle}>
                 {removeHtml(event?.title || '')}

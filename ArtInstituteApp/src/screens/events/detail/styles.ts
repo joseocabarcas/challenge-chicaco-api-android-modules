@@ -31,6 +31,13 @@ export const styles = StyleSheet.create({
     top: 10,
     left: 10,
   },
+  circleActions: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    flexDirection: 'row',
+    gap: 4,
+  },
   circleBookmark: {
     position: 'absolute',
     top: 10,

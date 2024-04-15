@@ -1332,6 +1332,25 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - rtn-calendar (0.0.1):
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2022.05.16.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
 
@@ -1416,6 +1435,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - rtn-calendar (from `../node_modules/rtn-calendar`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1548,6 +1568,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  rtn-calendar:
+    :path: "../node_modules/rtn-calendar"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -1621,6 +1643,7 @@ SPEC CHECKSUMS:
   RNReanimated: 323436b1a5364dca3b5f8b1a13458455e0de9efe
   RNScreens: 9ec969a95987a6caae170ef09313138abf3331e1
   RNSVG: 75a2460f847b8d2974e2e558e62abd6d0c64acb1
+  rtn-calendar: 9ea3c2b52fc057f74274b58b9a7c1d6a43d60aab
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 805bf71192903b20fc14babe48080582fee65a80
 
