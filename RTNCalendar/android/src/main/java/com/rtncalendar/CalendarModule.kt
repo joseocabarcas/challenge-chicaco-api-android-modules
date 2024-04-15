@@ -61,6 +61,7 @@ class CalendarModule(val reactContext: ReactApplicationContext) : NativeCalendar
         put(CalendarContract.Events.DESCRIPTION, description)
         put(CalendarContract.Events.EVENT_LOCATION, location)
         put(CalendarContract.Events.CALENDAR_ID, calID)
+        put(CalendarContract.Events.EVENT_TIMEZONE, "America/Los_Angeles")
       }
 
       // check permissions
