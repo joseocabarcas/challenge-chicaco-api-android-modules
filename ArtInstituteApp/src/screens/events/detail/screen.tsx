@@ -3,15 +3,21 @@ import IconStar from '@app/assets/icons/icon_star_regular.svg'
 import IconStarFull from '@app/assets/icons/icon_star_solid.svg'
 import IconCalendar from '@app/assets/icons/icon_calendar.svg'
 import IconCalendarPlus from '@app/assets/icons/icon_calendar_plus.svg'
+import IconCalendarCheck from '@app/assets/icons/icon_calendar_check.svg'
 import IconMapLocation from '@app/assets/icons/icon_map_location.svg'
 import { EventProps } from '@app/navigation/types'
+import { Event } from '@app/types/event'
 import { removeHtml } from '@app/utils/removeHtml'
+import Notifications from '@app/integrations/notifications'
 import * as React from 'react'
 import {
+  Alert,
+  Platform,
   SafeAreaView,
   ScrollView,
   StatusBar,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native'
@@ -69,6 +75,7 @@ function EventScreen({ route, navigation }: EventProps) {
       event.end_time,
       event.location,
     )
+    void onScheduleNotification(val, event)
   }
 
   const onHandleAddToCalendarAutomatic = async () => {
@@ -86,6 +93,33 @@ function EventScreen({ route, navigation }: EventProps) {
       event.end_time,
       event.location,
     )
+    void onScheduleNotification(val, event)
+  }
+
+  const onScheduleNotification = (value: boolean | undefined, event: Event) => {
+    if (value) {
+      if (Platform.OS === 'android') {
+        ToastAndroid.showWithGravity(
+          'Event added successfull',
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+        )
+      } else {
+        Alert.alert('Event added successfull')
+      }
+      // Only for test
+      const currentDate = new Date()
+      const nextTime = currentDate.getSeconds() + 10
+      currentDate.setSeconds(nextTime)
+      // Schedule the notification
+      // Here we are passing the reminder string and date to the scheduleNotification method
+      void Notifications.scheduleNotificationEvent({
+        event: event,
+        date: currentDate,
+      })
+    } else {
+      Alert.alert('Oopss! We have been trouble with this')
+    }
   }
 
   return (
@@ -114,7 +148,7 @@ function EventScreen({ route, navigation }: EventProps) {
               <TouchableOpacity
                 onPress={() => void onHandleAddToCalendarAutomatic()}
                 style={[styles.circleButton]}>
-                <IconCalendarPlus height={18} width={14} color={'#FFFFFF'} />
+                <IconCalendarCheck height={18} width={14} color={'#FFFFFF'} />
               </TouchableOpacity>
               {/* Add to calendar */}
               <TouchableOpacity

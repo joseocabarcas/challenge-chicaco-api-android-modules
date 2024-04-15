@@ -2,6 +2,7 @@ package com.rtncalendar
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,21 +14,38 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.facebook.react.bridge.ActivityEventListener
+import com.facebook.react.bridge.BaseActivityEventListener
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.modules.core.PermissionListener
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.Date
 import java.util.TimeZone
+
 
 class CalendarModule(val reactContext: ReactApplicationContext) : NativeCalendarSpec(reactContext), PermissionListener {
 
   override fun getName() = NAME
 
-  var promiseHandle: Promise? = null
+  private var promiseHandle: Promise? = null
+
+  val mActivityEventListener: ActivityEventListener = object : BaseActivityEventListener() {
+    override fun onActivityResult(
+      activity: Activity,
+      requestCode: Int,
+      resultCode: Int,
+      intent: Intent?
+    ) {
+      Log.d("onActivityResult", "requestCode:${requestCode}  resultCode:${resultCode}")
+      if (requestCode == 11) {
+        promiseHandle?.resolve(true)
+      }
+    }
+  }
+
+  init {
+    reactContext.addActivityEventListener(mActivityEventListener)
+  }
 
   @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   override fun addEvent(title: String, description: String, dateStart: String, dateEnd: String, timeStart: String, timeEnd: String, location: String, promise: Promise) {
@@ -42,7 +60,7 @@ class CalendarModule(val reactContext: ReactApplicationContext) : NativeCalendar
         .putExtra(CalendarContract.Events.EVENT_LOCATION, location)
         .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
       reactContext.startActivityForResult(intent, 11, Bundle.EMPTY)
-      promise.resolve(true)
+      // promise.resolve(true)
     } catch (e: Exception) {
       promise.resolve(false)
       Log.e("CalendarModule", "addEvent: " + e.message)
