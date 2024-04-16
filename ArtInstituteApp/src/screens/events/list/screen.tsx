@@ -1,12 +1,6 @@
 import Header from '@app/components/header/header'
 import * as React from 'react'
-import {
-  SafeAreaView,
-  // ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-} from 'react-native'
+import { SafeAreaView, StatusBar, StyleSheet, Text } from 'react-native'
 
 import Events from './components/events/events'
 
