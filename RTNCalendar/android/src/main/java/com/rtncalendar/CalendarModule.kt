@@ -60,7 +60,6 @@ class CalendarModule(val reactContext: ReactApplicationContext) : NativeCalendar
         .putExtra(CalendarContract.Events.EVENT_LOCATION, location)
         .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
       reactContext.startActivityForResult(intent, 11, Bundle.EMPTY)
-      // promise.resolve(true)
     } catch (e: Exception) {
       promise.resolve(false)
       Log.e("CalendarModule", "addEvent: " + e.message)

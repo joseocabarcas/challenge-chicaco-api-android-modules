@@ -1,23 +1,19 @@
 import IconBack from '@app/assets/icons/icon_back.svg'
+import IconCalendar from '@app/assets/icons/icon_calendar.svg'
+import IconCalendarCheck from '@app/assets/icons/icon_calendar_check.svg'
+import IconCalendarPlus from '@app/assets/icons/icon_calendar_plus.svg'
+import IconMapLocation from '@app/assets/icons/icon_map_location.svg'
 import IconStar from '@app/assets/icons/icon_star_regular.svg'
 import IconStarFull from '@app/assets/icons/icon_star_solid.svg'
-import IconCalendar from '@app/assets/icons/icon_calendar.svg'
-import IconCalendarPlus from '@app/assets/icons/icon_calendar_plus.svg'
-import IconCalendarCheck from '@app/assets/icons/icon_calendar_check.svg'
-import IconMapLocation from '@app/assets/icons/icon_map_location.svg'
+import { MoreTruncatedText } from '@app/components/more-truncated-text/more-truncated-text'
 import { EventProps } from '@app/navigation/types'
-import { Event } from '@app/types/event'
 import { removeHtml } from '@app/utils/removeHtml'
-import Notifications from '@app/integrations/notifications'
 import * as React from 'react'
 import {
-  Alert,
-  Platform,
   SafeAreaView,
   ScrollView,
   StatusBar,
   Text,
-  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native'
@@ -26,13 +22,11 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated'
-import { MoreTruncatedText } from '@app/components/more-truncated-text/more-truncated-text'
-import RTNCalendar from 'rtn-calendar/js/NativeCalendar'
-import { requestCalendarPermission } from '@app/utils/requestPermissionCalendar'
 
+import { useEventScreen } from './hooks/useEventScreen'
+import { useFavorites } from './hooks/useFavorites'
 import { useGetEvent } from './hooks/useGetEvent'
 import { styles } from './styles'
-import { useFavorites } from './hooks/useFavorites'
 
 function EventScreen({ route, navigation }: EventProps) {
   const { eventId, uriImage } = route.params
@@ -40,6 +34,8 @@ function EventScreen({ route, navigation }: EventProps) {
   const { isFavorite, addToFavorite, removeFromFavorite } =
     useFavorites(eventId)
   const event = data?.data
+  const { onHandleAddToCalendar, onHandleAddToCalendarAutomatic } =
+    useEventScreen(event)
 
   // It's optional styling for animated
   const rnStyle = useAnimatedStyle(() => {
@@ -61,65 +57,6 @@ function EventScreen({ route, navigation }: EventProps) {
   const onHandleFavoriteAction = () => {
     if (!event) return
     isFavorite ? removeFromFavorite(eventId) : addToFavorite(event)
-  }
-
-  const onHandleAddToCalendar = async () => {
-    if (!event) return
-
-    const val = await RTNCalendar?.addEvent(
-      event?.title,
-      event.short_description,
-      event.start_date,
-      event.end_date,
-      event.start_time,
-      event.end_time,
-      event.location,
-    )
-    void onScheduleNotification(val, event)
-  }
-
-  const onHandleAddToCalendarAutomatic = async () => {
-    if (!event) return
-    const resPermission = await requestCalendarPermission()
-
-    if (!resPermission) return
-
-    const val = await RTNCalendar?.addEventAutomatic(
-      event?.title,
-      event.short_description,
-      event.start_date,
-      event.end_date,
-      event.start_time,
-      event.end_time,
-      event.location,
-    )
-    void onScheduleNotification(val, event)
-  }
-
-  const onScheduleNotification = (value: boolean | undefined, event: Event) => {
-    if (value) {
-      if (Platform.OS === 'android') {
-        ToastAndroid.showWithGravity(
-          'Event added successfull',
-          ToastAndroid.LONG,
-          ToastAndroid.BOTTOM,
-        )
-      } else {
-        Alert.alert('Event added successfull')
-      }
-      // Only for test
-      const currentDate = new Date()
-      const nextTime = currentDate.getSeconds() + 10
-      currentDate.setSeconds(nextTime)
-      // Schedule the notification
-      // Here we are passing the reminder string and date to the scheduleNotification method
-      void Notifications.scheduleNotificationEvent({
-        event: event,
-        date: currentDate,
-      })
-    } else {
-      Alert.alert('Oopss! We have been trouble with this')
-    }
   }
 
   return (
