@@ -7,6 +7,7 @@ import Favorite from '../favorite/favorite'
 
 function Favorites() {
   const favorites = useFavoritesEvents()
+
   const renderItem: ListRenderItem<Event> = ({ item }) => {
     return <Favorite event={item} />
   }
